@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 #pragma warning disable CA1814
 #pragma warning disable S2368
@@ -29,7 +29,53 @@ namespace SpiralMatrixTask
         /// </example>
         public static int[,] GetMatrix(int size)
         {
-            throw new NotImplementedException("You need to implement this method.");
-        }
+            if (size <= 0)
+            {
+                throw new ArgumentException($"Size of matrix '{size}' cannot be less or equal zero.");
+            }
+
+            int rowStartIdx = 0, columnStartIdx = 0, rowEndIdx = size - 1, columnEndIdx = size - 1, value = 1;
+            var matrix = new int[size, size];
+            while (value <= size * size)
+            {
+                // Filling up right.
+                for (int i = columnStartIdx; i <= columnEndIdx; i++)
+                {
+                    matrix[rowStartIdx, i] = value;
+                    value++;
+                }
+
+                rowStartIdx++;
+
+                // Filling up down.
+                for (int i = rowStartIdx; i <= rowEndIdx; i++)
+                {
+                    matrix[i, columnEndIdx] = value;
+                    value++;
+                }
+
+                columnEndIdx--;
+
+                // Filling up left.
+                for (int i = columnEndIdx; i >= columnStartIdx; i--)
+                {
+                    matrix[rowEndIdx, i] = value;
+                    value++;
+                }
+
+                rowEndIdx--;
+
+                // Filling up.
+                for (int i = rowEndIdx; i >= rowStartIdx; i--)
+                {
+                    matrix[i, columnStartIdx] = value;
+                    value++;
+                }
+
+                columnStartIdx++;
+            }
+
+            return matrix;
+        }        
     }
 }
